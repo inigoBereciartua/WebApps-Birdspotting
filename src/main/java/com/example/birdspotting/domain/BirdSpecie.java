@@ -1,21 +1,25 @@
 package com.example.birdspotting.domain;
 
-import java.time.Year;
+import java.io.Serializable;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
-public class BirdSpecie {
+public class BirdSpecie implements Serializable{
 	
-	@NotEmpty(message = "Must be not empty")
+	private static final long serialVersionUID = 1L;
+	
+	@NotEmpty(message = "{birdSpecie.blank}")
 	private String name;
-	
-	@NotNull
-	@Min(1)
+		
+	@NotNull(message = "{birdSpecie.blank}")
+	@Min(value = 1250, message = "{birdspecie.yearOfDiscovery.min}")
     private Integer yearOfDiscovery;
 	
+	@NotEmpty(message = "{birdSpecie.blank}")
+	@Pattern(regexp = "[A-Z]{1,2}[0-9]{3}", message = "{birdSpecie.code.format}")
     private String code;
 		
 	public BirdSpecie(String name, Integer yearOfDiscovery, String code) {
@@ -53,6 +57,22 @@ public class BirdSpecie {
 	public String toString() {
 		return String.format("%s - %d (%s)", getName(), getYearOfDiscovery(), getCode());
 	}
+		
+	@Override
+    public boolean equals(Object obj) {
+       if (this == obj) {    	   
+    	   return true;
+       }
+       if (obj == null || getClass() != obj.getClass()) {
+    	   return false;    	   
+       }
+       BirdSpecie other = (BirdSpecie) obj;
+       if (!code.equals(other.code)) {    	   
+    	   return false;
+       }
+       return name.equalsIgnoreCase(other.name);
+    }
+
 	
 	
 }

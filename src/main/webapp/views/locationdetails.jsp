@@ -25,9 +25,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${spotLocation.spottedBirds}" var="bird">
+			<c:forEach items="${spotLocation.spottedBirds}" var="bird" varStatus = "loop">
 				<tr>
-					<td>-1</td>
+					<td>${loop.count}</td>
 					<td>${bird.birdSpecie.name}</td>
 					<td>${bird.birdSpecie.yearOfDiscovery}</td>
 					<td>${bird.birdSpecie.code}</td>

@@ -16,6 +16,7 @@ import com.example.birdspotting.domain.BirdSpecie;
 import com.example.birdspotting.domain.BirdSpotLocation;
 import com.example.birdspotting.domain.SpottedBird;
 import com.example.birdspotting.service.SpottedBirdService;
+import com.example.birdspotting.validator.NewBirdSpottingValidation;
 
 @Controller
 public class NewBirdSpottingController {
@@ -26,19 +27,24 @@ private SpottedBirdService birdSpottingService;
 	public void SpottedBirdbirdSpottingController(SpottedBirdService spottedBirdService) {
 		this.birdSpottingService = spottedBirdService;
 	}
+	@Autowired
+	private NewBirdSpottingValidation newBirdSpottingValidation;
 	
-	@GetMapping("/birdspotting/{name}/newbirdspotting")
-	public String newBirdSpotting(@PathVariable("name") String locationName, Model model) {		
+	@GetMapping("/birdspotting/{spotLocation}/newbirdspotting")
+	public String newBirdSpotting(@PathVariable("spotLocation") String locationName, Model model) {		
 		model.addAttribute("spotLocation", locationName);
 		model.addAttribute("birdSpecie", new BirdSpecie(new String(), 0, new String()));
 		return "newBirdSpotting";
 	}
 	
-	@PostMapping("/birdspotting/{name}/newbirdspotting")
-	public String onSubmit(@PathVariable("name") String locationName, @Valid BirdSpecie birdSpecie, Model model, BindingResult result) {				
-		if(result.hasErrors())return "newBirdSpotting";
+	@PostMapping("/birdspotting/{spotLocation}/newbirdspotting")
+	public String onSubmit(@PathVariable("spotLocation") String locationName, @Valid BirdSpecie birdSpecie, BindingResult result) {				
+		newBirdSpottingValidation.validate(birdSpecie, result);
+		if(result.hasErrors()) {
+			return "newBirdSpotting";
+		}		
 		BirdSpotLocation location = birdSpottingService.findByName(locationName).get();
-		location.newBirdSpot(birdSpecie);
+		location.increaseBirdSpot(birdSpecie);
 		String url = "/birdspotting/" + locationName;
 		return "redirect:" + url;
 	}

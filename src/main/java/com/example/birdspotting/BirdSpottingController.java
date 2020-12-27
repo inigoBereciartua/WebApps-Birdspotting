@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.example.birdspotting.domain.BirdSpotLocation;
 import com.example.birdspotting.service.SpottedBirdService;
 
@@ -29,9 +27,9 @@ public class BirdSpottingController {
 	}
 		
 	
-	@GetMapping("/birdspotting/{name}")
-	public String show(@PathVariable("name") String locationName, Model model) {
-		Optional<BirdSpotLocation> optLocation = birdSpottingService.findByName(locationName);
+	@GetMapping("/birdspotting/{spotLocation}")
+	public String show(@PathVariable("spotLocation") String locationName, Model model) {
+		Optional<BirdSpotLocation> optLocation = birdSpottingService.findByName(locationName);		
 		if(optLocation == null) {
 			return "redirect:/birdspotting";
 		}
